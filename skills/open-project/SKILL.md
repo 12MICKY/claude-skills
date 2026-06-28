@@ -81,7 +81,16 @@ npx create-next-app@latest <name> --typescript --tailwind --app --no-src-dir
 
 **Docker:**
 ```yaml
-# docker-compose.yml skeleton with service + volume + network
+services:
+  app:
+    image: <name>:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+volumes:
+  data:
+networks:
+  default:
 ```
 
 ### 3. Initial commit

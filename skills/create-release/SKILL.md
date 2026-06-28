@@ -50,6 +50,9 @@ Group commits since last tag by type:
 ### Bug Fixes
 - <commit message> (<short sha>)
 
+### Refactors
+- <commit message> (<short sha>)
+
 ### Chores / Maintenance
 - <commit message> (<short sha>)
 
@@ -60,6 +63,10 @@ Skip merge commits (`Merge branch`, `Merge pull request`).
 
 ### 4. Create and push tag
 ```bash
+# Verify git identity is configured
+git config user.name && git config user.email || \
+  { echo "Set git user.name and user.email first"; exit 1; }
+
 git tag -a <version> -m "Release <version>"
 git push origin <version>
 ```

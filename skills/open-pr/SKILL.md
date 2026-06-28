@@ -12,8 +12,9 @@ Create a GitHub Pull Request from the current branch with a well-structured titl
 ### 1. Gather context (run in parallel)
 - `git status` — check for uncommitted changes (warn if dirty)
 - `git branch --show-current` — current branch name
-- `git log main...HEAD --oneline` (or master) — commits on this branch
-- `git diff main...HEAD --stat` — files changed
+- `git symbolic-ref refs/remotes/origin/HEAD | sed 's|.*/||'` — detect default base branch (main/master)
+- `git log <base>...HEAD --oneline` — commits on this branch
+- `git diff <base>...HEAD --stat` — files changed
 - `git remote get-url origin` — repo URL
 
 ### 2. Read the diff
@@ -21,9 +22,8 @@ Create a GitHub Pull Request from the current branch with a well-structured titl
 - If diff is large (>300 lines), read `--stat` only and focus on commit messages
 
 ### 3. Determine base branch
-- Default: `main`
-- If `main` doesn't exist, try `master`
-- If user specifies a base branch, use that
+- Use the base branch detected in Step 1
+- If user specifies a base branch, use that instead
 
 ### 4. Push branch if needed
 ```bash

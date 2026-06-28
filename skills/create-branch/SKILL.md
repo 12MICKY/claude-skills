@@ -52,8 +52,8 @@ If user is already on a feature branch and wants a sub-branch, use current branc
 
 ### 3. Check for conflicts
 ```bash
-git branch --list "<name>"
-git ls-remote --heads origin "<name>"
+git branch --list "<type>/<name>"
+git ls-remote --heads origin "<type>/<name>"
 ```
 If name exists locally or remotely → append `-v2` or suggest alternative.
 

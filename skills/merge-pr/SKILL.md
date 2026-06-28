@@ -43,7 +43,8 @@ gh pr view <PR#> --json isDraft --jq '.isDraft'
 
 **Gate 2 — CI passing:**
 ```bash
-gh pr view <PR#> --json statusCheckRollup --jq '.statusCheckRollup[] | select(.conclusion != "SUCCESS") | .name'
+gh pr view <PR#> --json statusCheckRollup \
+  --jq '.statusCheckRollup // [] | .[] | select(.conclusion != "SUCCESS") | .name'
 # if any result → STOP and list the failing checks
 ```
 
