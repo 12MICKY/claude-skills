@@ -1,29 +1,32 @@
-<div align="center">
+# Claude Skills Configuration Environment
 
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0UJWFdcQLHBB7xw_hLJGnKDGV7Za50Ic4Qzp-iFnSbO6SPT0YRfEklFay&s=10" width="160" alt="Claude" />
+This repository provides a template for managing custom domain-specific skills and workspace settings for **Claude Code**.
 
-# claude-skills
-
-**Production-grade Claude Code skills for infrastructure engineers.**
-
-Built from real homelab and production deployments — not tutorials.
-
-[![Skills](https://img.shields.io/badge/skills-13-0969da?style=flat-square)](skills/)
-[![Version](https://img.shields.io/badge/version-1.1.0-2da44e?style=flat-square)](https://github.com/12MICKY/claude-skills/releases)
-[![Validate](https://img.shields.io/github/actions/workflow/status/12MICKY/claude-skills/validate.yml?label=validate&style=flat-square)](https://github.com/12MICKY/claude-skills/actions)
-[![License](https://img.shields.io/badge/license-MIT-6e7781?style=flat-square)](LICENSE)
-
-</div>
+It is designed to be fully open-source, forkable, and easily customized for any hypervisor, container, or network administration environment without exposing sensitive local network coordinates or credentials.
 
 ---
 
-Each skill is a focused, self-contained knowledge module that Claude Code loads when relevant. The content comes from operating real systems — every pattern has been run in production, every gotcha has been hit.
+## Install & Quick Start
 
-No IPs, passwords, or environment-specific config. Drop in and use.
+To bootstrap or restore all 13 skills, clone the repository and run the setup script:
+
+```bash
+gh repo clone 12MICKY/claude-skills ~/claude-skills
+cd ~/claude-skills
+./setup.sh
+```
+
+### Upgrade & Synchronization:
+Run the sync script manually to package local changes and push back to GitHub:
+```bash
+./sync.sh
+```
+
+Skills are picked up immediately — no Claude Code restart needed.
 
 ---
 
-## Skills
+## Skills List
 
 ### Networking
 
@@ -65,26 +68,6 @@ No IPs, passwords, or environment-specific config. Drop in and use.
 
 ---
 
-## Install
-
-To bootstrap or restore all 13 skills, run the setup script:
-
-```bash
-gh repo clone 12MICKY/claude-skills ~/claude-skills
-cd ~/claude-skills
-./setup.sh
-```
-
-**Upgrade & Synchronization:**
-Run the sync script manually to package local changes and push back to GitHub:
-```bash
-./sync.sh
-```
-
-Skills are picked up immediately — no Claude Code restart needed.
-
----
-
 ## How It Works
 
 Claude Code reads `~/.claude/skills/<name>/SKILL.md` on startup. The `description` field in the frontmatter tells Claude when to load the skill:
@@ -101,26 +84,12 @@ When your message matches the description, Claude loads the full skill body into
 
 ---
 
-## Design Principles
+## Security & Privacy Guidelines (Forking)
 
-**No credentials.** Every example uses `<placeholder>` values. Safe to share, fork, and PR.
+When forking this repository to build your own configuration environment:
 
-**Opinionated.** Each skill includes the happy path, known pitfalls, and anti-patterns. If something will burn you in production, it's in there.
-
-**Production-validated.** Patterns come from running actual infrastructure — not rewritten from documentation.
-
-**CI-gated.** Every push validates frontmatter structure and scans for accidentally committed credentials.
-
----
-
-## Contributing
-
-1. Fork the repo
-2. Create `skills/<your-skill>/SKILL.md` — frontmatter + body following the existing format
-3. Push and let CI validate, or run the workflow script locally
-4. Open a PR
-
-Skill body should cover: when to use it, core patterns with working examples, and common failure modes.
+1. **Placeholder Enforcement**: Never commit raw API tokens, system credentials, or public IP addresses. Replace sensitive parameters with placeholders (e.g., `CLOUDFLARE_API_TOKEN` or `127.0.0.1`).
+2. **Local Overrides**: Keep machine-specific settings inside local environment vars and restrict access permissions on sensitive configuration folders.
 
 ---
 
