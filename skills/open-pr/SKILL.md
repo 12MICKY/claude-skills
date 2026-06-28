@@ -1,6 +1,6 @@
 ---
 name: "open-pr"
-description: "Create a GitHub Pull Request for the current branch. Trigger for: /open-pr, เปิด PR, create PR, สร้าง PR, push and PR, open pull request. Gathers diff summary, writes title+body, pushes branch, opens PR via gh CLI."
+description: "Create a GitHub Pull Request for the current branch. Trigger for: /open-pr, create PR, open pull request, push and PR, submit PR. Gathers diff summary, writes title+body, pushes branch, opens PR via gh CLI."
 ---
 
 # Open PR
@@ -35,7 +35,7 @@ Check if remote branch exists first with `git ls-remote --heads origin <branch>`
 **Title rules:**
 - Max 70 characters
 - Format: `<type>: <what changed>` — type = feat / fix / refactor / chore / docs
-- Thai branch names → translate intent to English title
+- Translate any non-English branch names to an English title
 
 **Body template:**
 ```markdown

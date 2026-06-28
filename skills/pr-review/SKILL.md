@@ -1,6 +1,6 @@
 ---
 name: "pr-review"
-description: "Review a GitHub PR or local diff and write structured review comments. Trigger for: /pr-review, review PR, รีวิว PR, review this diff, write review, code review PR #N. Reads changes, finds bugs/issues, posts inline comments via gh CLI or prints review."
+description: "Review a GitHub PR or local diff and write structured review comments. Trigger for: /pr-review, review PR, review this diff, write review, code review PR #N. Reads changes, finds bugs/issues, posts inline comments via gh CLI or prints review."
 ---
 
 # PR Review

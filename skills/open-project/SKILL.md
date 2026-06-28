@@ -1,11 +1,11 @@
 ---
 name: "open-project"
-description: "Initialize or open a new code project with proper structure, git, and GitHub repo. Trigger for: /open-project, เปิด project, สร้าง project ใหม่, init project, new project, bootstrap project. Creates directory structure, git init, optional GitHub repo, optional CLAUDE.md."
+description: "Initialize a new code project with proper structure, git, and GitHub repo. Trigger for: /open-project, init project, new project, bootstrap project, create project, start project. Creates directory structure, git init, optional GitHub repo."
 ---
 
 # Open Project
 
-Bootstrap a new project with the right structure for Thiraphat's stack (Python / Node.js / Go / Next.js / Docker).
+Bootstrap a new project with the right structure for the chosen stack (Python / Node.js / Go / Next.js / Docker).
 
 ## Invocation Forms
 - `/open-project` — interactive: ask name + stack
@@ -21,7 +21,7 @@ Bootstrap a new project with the right structure for Thiraphat's stack (Python /
 | `go` | `cmd/`, `internal/`, `go.mod`, `Dockerfile` |
 | `nextjs` | `npx create-next-app` with app router |
 | `docker` | `docker-compose.yml` + service skeleton |
-| `bare` | Just `git init` + `.gitignore` + README |
+| `bare` | Just `git init` + `.gitignore` |
 
 ## Workflow
 
@@ -91,22 +91,22 @@ git commit -m "chore: init <name> project"
 ```
 
 ### 4. GitHub repo (ask unless already specified)
-"สร้าง GitHub repo ด้วยไหม? (yes/no)"
+Ask: "Create a GitHub repo? (yes/no)"
 
 If yes:
 ```bash
 gh repo create 12MICKY/<name> --private --source=. --push
 ```
-Default: **private**. Ask if public needed.
+Default: **private**. Ask if public is needed.
 
 ### 5. Output
 - List of files created
 - GitHub repo URL (if created)
-- Next step suggestion (1 line): e.g. "รัน `cd <name> && npm install` ต่อได้เลย"
+- One-line next step hint: e.g. `cd <name> && npm install`
 
 ## Rules
 - Never create `README.md` unless user asks
-- Never add Docker config for K3s/Swarm by default — that's a deploy step, not init
+- Never add Docker config for K3s/Swarm by default — that is a deploy step, not init
 - Dockerfile always uses non-root user
 - `.env.example` has placeholder values, never real secrets
 - Go module path always uses `github.com/12MICKY/<name>`

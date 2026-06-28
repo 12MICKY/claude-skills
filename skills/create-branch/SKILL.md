@@ -1,6 +1,6 @@
 ---
 name: "create-branch"
-description: "Create and switch to a new git branch with proper naming convention. Trigger for: /create-branch, สร้าง branch, แยก branch, new branch, branch ใหม่, checkout -b. Infers branch type from context, names it correctly, and pushes if requested."
+description: "Create and switch to a new git branch with proper naming convention. Trigger for: /create-branch, new branch, create branch, checkout new branch, branch off. Infers branch type from context, names it correctly, and pushes if requested."
 ---
 
 # Create Branch
@@ -17,7 +17,7 @@ Create and switch to a new git branch with consistent naming.
 Format: `<type>/<short-description>`
 - Words separated by `-`, lowercase only
 - Max 50 chars total
-- No spaces, no Thai characters in branch name (translate to English)
+- No spaces, no non-ASCII characters in branch name
 
 | Type | When |
 |------|------|
@@ -48,7 +48,7 @@ If user is already on a feature branch and wants a sub-branch, use current branc
 ### 2. Infer name (if not given)
 - Read recent git log and any uncommitted changes
 - Infer intent from task/conversation context
-- Propose: "สร้าง branch `feat/user-auth-jwt` ไหม?" — one name, not a list
+- Propose one name, e.g. `feat/user-auth-jwt` — not a list
 
 ### 3. Check for conflicts
 ```bash
@@ -66,8 +66,8 @@ Or if base branch is not current:
 git checkout -b <type>/<name> <base>
 ```
 
-### 5. Push (ask unless user said "push" or "พร้อม PR")
-"Push ขึ้น remote เลยไหม?"
+### 5. Push (ask unless user said "push" or implied ready for PR)
+Ask: "Push to remote?"
 
 If yes:
 ```bash
