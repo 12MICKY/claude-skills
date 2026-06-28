@@ -25,41 +25,41 @@ No IPs, passwords, or environment-specific config. Drop in and use.
 
 ### Networking
 
-| | Skill | Covers |
-|---|---|---|
-| `🔥` | [mikrotik-routeros](skills/mikrotik-routeros/) | Firewall chains (RAW/filter/mangle/NAT), Queue Tree & PCQ bandwidth limiting, VLAN bridge-filtering, WireGuard, CAPsMAN, OSPF/BGP, scripting |
-| `🔒` | [wireguard-vpn](skills/wireguard-vpn/) | Server/client config, hub-and-spoke topology, road-warrior clients, multi-WAN asymmetric routing fix, MTU tuning |
-| `☁️` | [cloudflare-tunnel](skills/cloudflare-tunnel/) | Zero-trust public exposure without open ports, K3s HA deployment, DNS automation, ConfigMap-based config management |
-| `📡` | [network-engineer](skills/network-engineer/) | OSI-layer troubleshooting methodology, BGP state machine, Cisco IOS patterns, interface health counters, VLAN design, Netmiko automation |
+| Skill | Covers |
+|---|---|
+| [mikrotik-routeros](skills/mikrotik-routeros/) | Firewall chains (RAW/filter/mangle/NAT), Queue Tree & PCQ bandwidth limiting, VLAN bridge-filtering, WireGuard, CAPsMAN, OSPF/BGP, scripting |
+| [wireguard-vpn](skills/wireguard-vpn/) | Server/client config, hub-and-spoke topology, road-warrior clients, multi-WAN asymmetric routing fix, MTU tuning |
+| [cloudflare-tunnel](skills/cloudflare-tunnel/) | Zero-trust public exposure without open ports, K3s HA deployment, DNS automation, ConfigMap-based config management |
+| [network-engineer](skills/network-engineer/) | OSI-layer troubleshooting methodology, BGP state machine, Cisco IOS patterns, interface health counters, VLAN design, Netmiko automation |
 
 ### Infrastructure
 
-| | Skill | Covers |
-|---|---|---|
-| `🖥️` | [proxmox-homelab](skills/proxmox-homelab/) | PVE cluster, VM/LXC lifecycle, Ceph RBD/CephFS, HA manager, PBS backup, SDN/VXLAN, pvesh API |
-| `⎈` | [k3s-kubernetes](skills/k3s-kubernetes/) | Deployments, Traefik IngressRoute, ConfigMaps/Secrets, PVCs, private registry, rolling updates, debugging |
-| `🐳` | [docker-swarm](skills/docker-swarm/) | Stack deploy, immutable config/secret versioning pattern, placement constraints, overlay networks |
-| `🐧` | [linux-server-admin](skills/linux-server-admin/) | systemd services/timers, LVM, netplan/nmcli, ufw/iptables, fail2ban, log analysis, performance diagnostics |
+| Skill | Covers |
+|---|---|
+| [proxmox-homelab](skills/proxmox-homelab/) | PVE cluster, VM/LXC lifecycle, Ceph RBD/CephFS, HA manager, PBS backup, SDN/VXLAN, pvesh API |
+| [k3s-kubernetes](skills/k3s-kubernetes/) | Deployments, Traefik IngressRoute, ConfigMaps/Secrets, PVCs, private registry, rolling updates, debugging |
+| [docker-swarm](skills/docker-swarm/) | Stack deploy, immutable config/secret versioning pattern, placement constraints, overlay networks |
+| [linux-server-admin](skills/linux-server-admin/) | systemd services/timers, LVM, netplan/nmcli, ufw/iptables, fail2ban, log analysis, performance diagnostics |
 
 ### Observability
 
-| | Skill | Covers |
-|---|---|---|
-| `📊` | [grafana-prometheus](skills/grafana-prometheus/) | PromQL queries, dashboard design, alerting rules, exporters (node/blackbox/snmp), WireGuard peer health metrics |
+| Skill | Covers |
+|---|---|
+| [grafana-prometheus](skills/grafana-prometheus/) | PromQL queries, dashboard design, alerting rules, exporters (node/blackbox/snmp), WireGuard peer health metrics |
 
 ### Development
 
-| | Skill | Covers |
-|---|---|---|
-| `⚡` | [python-fastapi](skills/python-fastapi/) | Async routes, Pydantic v2, SQLAlchemy 2.0 + asyncpg, JWT auth, background tasks, Docker + K3s deployment |
-| `▲` | [nextjs-deployment](skills/nextjs-deployment/) | Standalone output mode, static asset directory gotcha, Docker multi-stage, K3s deploy, PM2, CI/CD |
+| Skill | Covers |
+|---|---|
+| [python-fastapi](skills/python-fastapi/) | Async routes, Pydantic v2, SQLAlchemy 2.0 + asyncpg, JWT auth, background tasks, Docker + K3s deployment |
+| [nextjs-deployment](skills/nextjs-deployment/) | Standalone output mode, static asset directory gotcha, Docker multi-stage, K3s deploy, PM2, CI/CD |
 
 ### AI & Workflow
 
-| | Skill | Covers |
-|---|---|---|
-| `🧠` | [context-engineering](skills/context-engineering/) | Context window mechanics, compression strategies, degradation patterns, multi-agent coordination, tool design, harness engineering |
-| `🛠️` | [thai-dev-workflow](skills/thai-dev-workflow/) | K3s-first deployment policy, Git workflow for solo/small teams, stack selection, monitoring, backup strategy |
+| Skill | Covers |
+|---|---|
+| [context-engineering](skills/context-engineering/) | Context window mechanics, compression strategies, degradation patterns, multi-agent coordination, tool design, harness engineering |
+| [thai-dev-workflow](skills/thai-dev-workflow/) | K3s-first deployment policy, Git workflow for solo/small teams, stack selection, monitoring, backup strategy |
 
 ---
 
@@ -118,7 +118,7 @@ When your message matches the description, Claude loads the full skill body into
 
 1. Fork the repo
 2. Create `skills/<your-skill>/SKILL.md` — frontmatter + body following the existing format
-3. Run the validator locally: `bash .github/workflows/validate.sh` (or push and let CI check)
+3. Push and let CI validate, or run the workflow script locally
 4. Open a PR
 
 Skill body should cover: when to use it, core patterns with working examples, and common failure modes.
