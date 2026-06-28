@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="https://i.logos-download.com/114232/31116-05a1502c46130721c61b3a89eb569886.png/Claude_Logo_2023.png?dl" width="80" alt="Claude" />
+
 # claude-skills
 
 **Production-grade Claude Code skills for infrastructure engineers.**
