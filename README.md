@@ -1,61 +1,71 @@
+<div align="center">
+
 # claude-skills
 
-![Skills](https://img.shields.io/badge/skills-13-blue)
-![Version](https://img.shields.io/badge/version-1.1.0-green)
-![Validate](https://github.com/12MICKY/claude-skills/actions/workflows/validate.yml/badge.svg)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+**Production-grade Claude Code skills for infrastructure engineers.**
 
-Production-grade Claude Code skills for infrastructure engineers. Built from real homelab and production deployments — not tutorials.
+Built from real homelab and production deployments — not tutorials.
 
-**No IPs, passwords, or environment-specific credentials.** All patterns are generic and reusable.
+[![Skills](https://img.shields.io/badge/skills-13-0969da?style=flat-square)](skills/)
+[![Version](https://img.shields.io/badge/version-1.1.0-2da44e?style=flat-square)](https://github.com/12MICKY/claude-skills/releases)
+[![Validate](https://img.shields.io/github/actions/workflow/status/12MICKY/claude-skills/validate.yml?label=validate&style=flat-square)](https://github.com/12MICKY/claude-skills/actions)
+[![License](https://img.shields.io/badge/license-MIT-6e7781?style=flat-square)](LICENSE)
+
+</div>
+
+---
+
+Each skill is a focused, self-contained knowledge module that Claude Code loads when relevant. The content comes from operating real systems — every pattern has been run in production, every gotcha has been hit.
+
+No IPs, passwords, or environment-specific config. Drop in and use.
 
 ---
 
 ## Skills
 
-### Infrastructure
-
-| Skill | Description |
-|---|---|
-| [proxmox-homelab](skills/proxmox-homelab/) | PVE cluster, VM/LXC, Ceph, HA manager, PBS backup, SDN, pvesh automation |
-| [k3s-kubernetes](skills/k3s-kubernetes/) | Deployments, Traefik IngressRoute, ConfigMaps/Secrets, PVCs, private registry |
-| [docker-swarm](skills/docker-swarm/) | Stack deploy, immutable config versioning, placement, rolling updates |
-| [linux-server-admin](skills/linux-server-admin/) | systemd, disk/LVM, netplan/nmcli, ufw/iptables, fail2ban, log analysis |
-
 ### Networking
 
-| Skill | Description |
-|---|---|
-| [mikrotik-routeros](skills/mikrotik-routeros/) | Firewall chains, Queue Tree/PCQ, VLAN bridge-filter, WireGuard, CAPsMAN, OSPF/BGP |
-| [wireguard-vpn](skills/wireguard-vpn/) | Server/client, hub-and-spoke, road-warrior, multi-WAN, MTU tuning |
-| [cloudflare-tunnel](skills/cloudflare-tunnel/) | Zero-trust exposure, K3s HA deploy, DNS automation, no open ports |
-| [network-engineer](skills/network-engineer/) | OSI troubleshooting, BGP/OSPF, Cisco IOS, interface counters, Netmiko automation |
+| | Skill | Covers |
+|---|---|---|
+| `🔥` | [mikrotik-routeros](skills/mikrotik-routeros/) | Firewall chains (RAW/filter/mangle/NAT), Queue Tree & PCQ bandwidth limiting, VLAN bridge-filtering, WireGuard, CAPsMAN, OSPF/BGP, scripting |
+| `🔒` | [wireguard-vpn](skills/wireguard-vpn/) | Server/client config, hub-and-spoke topology, road-warrior clients, multi-WAN asymmetric routing fix, MTU tuning |
+| `☁️` | [cloudflare-tunnel](skills/cloudflare-tunnel/) | Zero-trust public exposure without open ports, K3s HA deployment, DNS automation, ConfigMap-based config management |
+| `📡` | [network-engineer](skills/network-engineer/) | OSI-layer troubleshooting methodology, BGP state machine, Cisco IOS patterns, interface health counters, VLAN design, Netmiko automation |
+
+### Infrastructure
+
+| | Skill | Covers |
+|---|---|---|
+| `🖥️` | [proxmox-homelab](skills/proxmox-homelab/) | PVE cluster, VM/LXC lifecycle, Ceph RBD/CephFS, HA manager, PBS backup, SDN/VXLAN, pvesh API |
+| `⎈` | [k3s-kubernetes](skills/k3s-kubernetes/) | Deployments, Traefik IngressRoute, ConfigMaps/Secrets, PVCs, private registry, rolling updates, debugging |
+| `🐳` | [docker-swarm](skills/docker-swarm/) | Stack deploy, immutable config/secret versioning pattern, placement constraints, overlay networks |
+| `🐧` | [linux-server-admin](skills/linux-server-admin/) | systemd services/timers, LVM, netplan/nmcli, ufw/iptables, fail2ban, log analysis, performance diagnostics |
 
 ### Observability
 
-| Skill | Description |
-|---|---|
-| [grafana-prometheus](skills/grafana-prometheus/) | PromQL, dashboard design, alerting, exporters, WireGuard peer metrics |
+| | Skill | Covers |
+|---|---|---|
+| `📊` | [grafana-prometheus](skills/grafana-prometheus/) | PromQL queries, dashboard design, alerting rules, exporters (node/blackbox/snmp), WireGuard peer health metrics |
 
-### Backend / Frontend
+### Development
 
-| Skill | Description |
-|---|---|
-| [python-fastapi](skills/python-fastapi/) | Async routes, Pydantic v2, asyncpg/SQLAlchemy, JWT, background tasks, Docker |
-| [nextjs-deployment](skills/nextjs-deployment/) | Standalone output, Docker, K3s deploy, static asset gotchas, PM2, CI/CD |
+| | Skill | Covers |
+|---|---|---|
+| `⚡` | [python-fastapi](skills/python-fastapi/) | Async routes, Pydantic v2, SQLAlchemy 2.0 + asyncpg, JWT auth, background tasks, Docker + K3s deployment |
+| `▲` | [nextjs-deployment](skills/nextjs-deployment/) | Standalone output mode, static asset directory gotcha, Docker multi-stage, K3s deploy, PM2, CI/CD |
 
-### AI / Workflow
+### AI & Workflow
 
-| Skill | Description |
-|---|---|
-| [context-engineering](skills/context-engineering/) | Context mechanics, compression, degradation patterns, multi-agent, tool design |
-| [thai-dev-workflow](skills/thai-dev-workflow/) | K3s-first policy, Git workflow, stack selection, monitoring, backup strategy |
+| | Skill | Covers |
+|---|---|---|
+| `🧠` | [context-engineering](skills/context-engineering/) | Context window mechanics, compression strategies, degradation patterns, multi-agent coordination, tool design, harness engineering |
+| `🛠️` | [thai-dev-workflow](skills/thai-dev-workflow/) | K3s-first deployment policy, Git workflow for solo/small teams, stack selection, monitoring, backup strategy |
 
 ---
 
 ## Install
 
-**All skills:**
+**All 13 skills:**
 ```bash
 git clone https://github.com/12MICKY/claude-skills.git
 cp -r claude-skills/skills/* ~/.claude/skills/
@@ -67,35 +77,54 @@ git clone https://github.com/12MICKY/claude-skills.git
 cp -r claude-skills/skills/mikrotik-routeros ~/.claude/skills/
 ```
 
-**One-liner:**
+**Upgrade:**
 ```bash
-git clone https://github.com/12MICKY/claude-skills.git && cp -r claude-skills/skills/* ~/.claude/skills/
+cd claude-skills && git pull && cp -r skills/* ~/.claude/skills/
 ```
+
+Skills are picked up immediately — no Claude Code restart needed.
 
 ---
 
-## Skill Format
+## How It Works
 
-```
-skills/
-└── skill-name/
-    └── SKILL.md      # frontmatter (name, description) + skill body
+Claude Code reads `~/.claude/skills/<name>/SKILL.md` on startup. The `description` field in the frontmatter tells Claude when to load the skill:
+
+```markdown
+---
+name: mikrotik-routeros
+description: Use this skill for MikroTik RouterOS configuration — firewall rules,
+             Queue Tree, VLAN bridge-filtering, WireGuard, CAPsMAN, OSPF/BGP...
+---
 ```
 
-The `description` field controls when Claude Code auto-activates the skill. Write it as "Use this skill when..." to make activation precise.
+When your message matches the description, Claude loads the full skill body into context automatically.
 
 ---
 
 ## Design Principles
 
-- **No secrets** — all examples use `<placeholder>` values
-- **Production patterns** — validated in real deployments, not copied from docs
-- **Opinionated** — known pitfalls and anti-patterns included, not just happy path
-- **Generic** — no hardcoded hostnames, subnets, or org-specific config
-- **CI validated** — frontmatter and credential checks on every push
+**No credentials.** Every example uses `<placeholder>` values. Safe to share, fork, and PR.
+
+**Opinionated.** Each skill includes the happy path, known pitfalls, and anti-patterns. If something will burn you in production, it's in there.
+
+**Production-validated.** Patterns come from running actual infrastructure — not rewritten from documentation.
+
+**CI-gated.** Every push validates frontmatter structure and scans for accidentally committed credentials.
+
+---
+
+## Contributing
+
+1. Fork the repo
+2. Create `skills/<your-skill>/SKILL.md` — frontmatter + body following the existing format
+3. Run the validator locally: `bash .github/workflows/validate.sh` (or push and let CI check)
+4. Open a PR
+
+Skill body should cover: when to use it, core patterns with working examples, and common failure modes.
 
 ---
 
 ## License
 
-MIT
+[MIT](LICENSE) — Thiraphat Srichit
