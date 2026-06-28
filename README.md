@@ -67,21 +67,18 @@ No IPs, passwords, or environment-specific config. Drop in and use.
 
 ## Install
 
-**All 13 skills:**
+To bootstrap or restore all 13 skills, run the setup script:
+
 ```bash
-git clone https://github.com/12MICKY/claude-skills.git
-cp -r claude-skills/skills/* ~/.claude/skills/
+gh repo clone 12MICKY/claude-skills ~/claude-skills
+cd ~/claude-skills
+./setup.sh
 ```
 
-**Single skill:**
+**Upgrade & Synchronization:**
+Run the sync script manually to package local changes and push back to GitHub:
 ```bash
-git clone https://github.com/12MICKY/claude-skills.git
-cp -r claude-skills/skills/mikrotik-routeros ~/.claude/skills/
-```
-
-**Upgrade:**
-```bash
-cd claude-skills && git pull && cp -r skills/* ~/.claude/skills/
+./sync.sh
 ```
 
 Skills are picked up immediately — no Claude Code restart needed.
