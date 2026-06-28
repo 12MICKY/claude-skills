@@ -1,82 +1,79 @@
-# Claude Skills Configuration Environment
+# claude-skills
 
-This repository provides a template for managing custom domain-specific skills and workspace settings for **Claude Code**.
+> 13 production-grade Claude Code skills for self-hosted infrastructure engineers.
 
-It is designed to be fully open-source, forkable, and easily customized for any hypervisor, container, or network administration environment without exposing sensitive local network coordinates or credentials.
+[![CI](https://github.com/12MICKY/claude-skills/actions/workflows/validate.yml/badge.svg)](https://github.com/12MICKY/claude-skills/actions/workflows/validate.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+Distilled from real infrastructure work — not tutorials. Covers the full self-hosted stack: MikroTik RouterOS, Proxmox VE, K3s, Cloudflare Tunnel, Docker Swarm, WireGuard, Grafana/Prometheus, FastAPI, Next.js, Linux server admin, enterprise network engineering, and context engineering for AI systems.
+
+Every skill includes production patterns, known pitfalls, and anti-patterns. No credentials or environment-specific addresses.
 
 ---
 
-## Install & Quick Start
-
-To bootstrap or restore all 13 skills, clone the repository and run the setup script:
+## Install
 
 ```bash
-gh repo clone 12MICKY/claude-skills ~/claude-skills
+git clone https://github.com/12MICKY/claude-skills.git ~/claude-skills
 cd ~/claude-skills
 ./setup.sh
-```
-
-### Upgrade & Synchronization:
-Run the sync script manually to package local changes and push back to GitHub:
-```bash
-./sync.sh
 ```
 
 Skills are picked up immediately — no Claude Code restart needed.
 
 ---
 
-## Skills List
+## Skills
 
 ### Networking
 
-| Skill | Covers |
+| Skill | What it covers |
 |---|---|
-| [mikrotik-routeros](skills/mikrotik-routeros/) | Firewall chains (RAW/filter/mangle/NAT), Queue Tree & PCQ bandwidth limiting, VLAN bridge-filtering, WireGuard, CAPsMAN, OSPF/BGP, scripting |
-| [wireguard-vpn](skills/wireguard-vpn/) | Server/client config, hub-and-spoke topology, road-warrior clients, multi-WAN asymmetric routing fix, MTU tuning |
-| [cloudflare-tunnel](skills/cloudflare-tunnel/) | Zero-trust public exposure without open ports, K3s HA deployment, DNS automation, ConfigMap-based config management |
-| [network-engineer](skills/network-engineer/) | OSI-layer troubleshooting methodology, BGP state machine, Cisco IOS patterns, interface health counters, VLAN design, Netmiko automation |
+| [mikrotik-routeros](skills/mikrotik-routeros/SKILL.md) | Firewall chains (RAW/filter/mangle/NAT), Queue Tree & PCQ bandwidth limiting, bridge VLAN filtering with HW offload, WireGuard, CAPsMAN, OSPF/BGP, scripting, DDNS |
+| [wireguard-vpn](skills/wireguard-vpn/SKILL.md) | Server/client config, hub-and-spoke topology, VPS relay, MTU tuning, key management, scoped iptables, Prometheus peer health metrics |
+| [network-engineer](skills/network-engineer/SKILL.md) | OSI-layer troubleshooting methodology, BGP state machine, Cisco IOS/IOS-XE patterns, interface health counters, enterprise design (spine-leaf/BGP/OSPF), Netmiko automation |
 
 ### Infrastructure
 
-| Skill | Covers |
+| Skill | What it covers |
 |---|---|
-| [proxmox-homelab](skills/proxmox-homelab/) | PVE cluster, VM/LXC lifecycle, Ceph RBD/CephFS, HA manager, PBS backup, SDN/VXLAN, pvesh API |
-| [k3s-kubernetes](skills/k3s-kubernetes/) | Deployments, Traefik IngressRoute, ConfigMaps/Secrets, PVCs, private registry, rolling updates, debugging |
-| [docker-swarm](skills/docker-swarm/) | Stack deploy, immutable config/secret versioning pattern, placement constraints, overlay networks |
-| [linux-server-admin](skills/linux-server-admin/) | systemd services/timers, LVM, netplan/nmcli, ufw/iptables, fail2ban, log analysis, performance diagnostics |
+| [proxmox-homelab](skills/proxmox-homelab/SKILL.md) | VM/LXC lifecycle, cluster management, Ceph RBD/CephFS, HA manager, PBS backup, SDN/VXLAN, cloud-init templates, pvesh API |
+| [k3s-kubernetes](skills/k3s-kubernetes/SKILL.md) | Deployments, Traefik IngressRoute, ConfigMaps/Secrets, PVCs, private registry, rolling updates, debugging, topology spread |
+| [docker-swarm](skills/docker-swarm/SKILL.md) | Stack deployment, immutable config/secret versioning pattern, placement constraints, overlay networks, registry auth |
+| [linux-server-admin](skills/linux-server-admin/SKILL.md) | systemd services/timers, LVM, netplan/nmcli, ufw/iptables, fail2ban, log analysis, performance diagnostics, SSH hardening |
+| [cloudflare-tunnel](skills/cloudflare-tunnel/SKILL.md) | Zero-trust public exposure, K3s HA deployment, ConfigMap-based config, DNS automation, adding/removing service routes |
 
 ### Observability
 
-| Skill | Covers |
+| Skill | What it covers |
 |---|---|
-| [grafana-prometheus](skills/grafana-prometheus/) | PromQL queries, dashboard design, alerting rules, exporters (node/blackbox/snmp), WireGuard peer health metrics |
+| [grafana-prometheus](skills/grafana-prometheus/SKILL.md) | PromQL queries, dashboard design, alerting rules, node/blackbox/snmp exporters, textfile collector, WireGuard peer health |
 
 ### Development
 
-| Skill | Covers |
+| Skill | What it covers |
 |---|---|
-| [python-fastapi](skills/python-fastapi/) | Async routes, Pydantic v2, SQLAlchemy 2.0 + asyncpg, JWT auth, background tasks, Docker + K3s deployment |
-| [nextjs-deployment](skills/nextjs-deployment/) | Standalone output mode, static asset directory gotcha, Docker multi-stage, K3s deploy, PM2, CI/CD |
+| [python-fastapi](skills/python-fastapi/SKILL.md) | Async routes, Pydantic v2, SQLAlchemy 2.0 + asyncpg, JWT auth, background tasks, Docker multi-stage, K3s deploy |
+| [nextjs-deployment](skills/nextjs-deployment/SKILL.md) | Standalone output mode, static asset directory gotcha, Docker multi-stage, PM2, K3s deploy, GitHub Actions CI/CD |
 
-### AI & Workflow
+### Workflow & AI
 
-| Skill | Covers |
+| Skill | What it covers |
 |---|---|
-| [context-engineering](skills/context-engineering/) | Context window mechanics, compression strategies, degradation patterns, multi-agent coordination, tool design, harness engineering |
-| [thai-dev-workflow](skills/thai-dev-workflow/) | K3s-first deployment policy, Git workflow for solo/small teams, stack selection, monitoring, backup strategy |
+| [thai-dev-workflow](skills/thai-dev-workflow/SKILL.md) | K3s-first deployment policy, service lifecycle (add/remove), Git workflow, tech stack selection, monitoring and backup strategy |
+| [context-engineering](skills/context-engineering/SKILL.md) | Context window mechanics, KV cache strategy, compression techniques, degradation patterns, memory systems, multi-agent coordination, tool design, harness engineering, LLM evaluation |
 
 ---
 
 ## How It Works
 
-Claude Code reads `~/.claude/skills/<name>/SKILL.md` on startup. The `description` field in the frontmatter tells Claude when to load the skill:
+Claude Code reads `~/.claude/skills/<name>/SKILL.md` and uses the `description` frontmatter to decide when to load a skill:
 
 ```markdown
 ---
 name: mikrotik-routeros
-description: Use this skill for MikroTik RouterOS configuration — firewall rules,
-             Queue Tree, VLAN bridge-filtering, WireGuard, CAPsMAN, OSPF/BGP...
+description: Use this skill for MikroTik RouterOS v7 — firewall chains (RAW/filter/mangle/NAT),
+             Queue Tree and PCQ bandwidth management, bridge VLAN filtering...
 ---
 ```
 
@@ -84,24 +81,39 @@ When your message matches the description, Claude loads the full skill body into
 
 ---
 
-## Security & Privacy Guidelines (Forking)
+## Sync Local Changes Back
 
-When forking this repository to build your own configuration environment:
+If you edit a skill locally and want to push it back to the repo:
 
-1. **Placeholder Enforcement**: Never commit raw API tokens, system credentials, or public IP addresses. Replace sensitive parameters with placeholders (e.g., `CLOUDFLARE_API_TOKEN` or `127.0.0.1`).
-2. **Local Overrides**: Keep machine-specific settings inside local environment vars and restrict access permissions on sensitive configuration folders.
+```bash
+# Edit ~/.claude/skills/mikrotik-routeros/SKILL.md
+# Then copy it into the repo and push
+
+cp ~/.claude/skills/mikrotik-routeros/SKILL.md ~/claude-skills/skills/mikrotik-routeros/SKILL.md
+cd ~/claude-skills
+git add skills/mikrotik-routeros/SKILL.md
+git commit -m "update: mikrotik-routeros — add Queue Tree pattern"
+git push
+```
 
 ---
 
-## Reference Materials & Learning Logs
+## Reference Material
 
-This setup is grounded in official, enterprise-grade networking and system administration training materials:
+| Document | Skills |
+|---|---|
+| [MikroTik RouterOS v7 Guide](docs/RouterOS_v7_Guide.md) | `mikrotik-routeros`, `network-engineer` |
+| [Proxmox VE Admin Guide](docs/Proxmox_VE_Admin_Guide.md) | `proxmox-homelab` |
+| [Ubiquiti UEWA Wireless Guide](docs/Ubiquiti_UEWA_Guide.md) | `network-engineer`, `mikrotik-routeros` |
 
-| Document / Training Guide | Core Implementations & Blueprints | Associated Skills |
-|---|---|---|
-| [MikroTik RouterOS Documentation](https://manual.mikrotik.com/) | <ul><li>Zero-Script Recursive Routing Failover via virtual target hops</li><li>Cloudflare Dynamic DNS API PUT updates using `/tool fetch`</li><li>Automated Discord webhook alerts</li><li>Bridge VLAN Filtering (Hardware Offloaded)</li></ul> | `mikrotik-routeros`, `network-engineer` |
-| [Ubiquiti UEWA Training Guide](https://dl.ubnt.com/guides/training/courses/UEWA_Training_Guide_V2.1.pdf) | <ul><li>Layer-3 AP Adoption via DHCP Option 43 and DNS `unifi` resolution</li><li>Manual SSH `set-inform` binding flow</li><li>Minimum RSSI `-75 dBm` soft-kick threshold for client roaming</li><li>Airtime Fairness and Band Steering optimization</li></ul> | `wireguard-vpn`, `network-engineer` |
-| [Proxmox VE Admin Guide](https://pve.proxmox.com/pve-docs/pve-admin-guide.html) | <ul><li>PBS backup target scheduling and prune policies</li><li>Watchdog High Availability group definitions</li><li>LXC unprivileged mapping and mount points</li></ul> | `proxmox-homelab` |
+---
+
+## Fork & Customize
+
+1. Fork this repo.
+2. Edit or add `skills/<your-skill>/SKILL.md`.
+3. Keep credentials and private IPs out — use placeholders like `YOUR_SERVER_IP`.
+4. Run `./setup.sh` to install locally.
 
 ---
 

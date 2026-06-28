@@ -1,48 +1,37 @@
 #!/usr/bin/env bash
+# Sync skills from this repo's skills/ directory into ~/.claude/skills/
+# Only syncs skills that exist in this repo — does not touch other installed skills.
 set -euo pipefail
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
 BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
 NC='\033[0m'
 
-log_info()    { printf "${BLUE}[INFO]${NC} %s\n" "$1"; }
-log_success() { printf "${GREEN}[SUCCESS]${NC} %s\n" "$1"; }
-log_error()   { printf "${RED}[ERROR]${NC} %s\n" "$1" >&2; }
+log_ok()    { printf "${GREEN}[OK]${NC}   %s\n" "$1"; }
+log_info()  { printf "${BLUE}[--]${NC}   %s\n" "$1"; }
+log_error() { printf "${RED}[ERR]${NC}  %s\n" "$1" >&2; }
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CLAUDE_SRC="$HOME/.claude/skills"
+SKILLS_SRC="$REPO_DIR/skills"
+CLAUDE_DST="$HOME/.claude/skills"
 
-if [ ! -d "$REPO_DIR" ]; then
-    log_error "Repository directory not found!"
-    exit 1
+if [ ! -d "$SKILLS_SRC" ]; then
+  log_error "skills/ directory not found"
+  exit 1
 fi
 
-if [ -d "$CLAUDE_SRC" ]; then
-    log_info "Archiving Claude Code skills to skills.tar.gz..."
-    tar -czf "$REPO_DIR/skills.tar.gz" -C "$HOME/.claude" skills
-    log_success "Synchronized Claude Code skills to skills.tar.gz"
-else
-    log_error "Local Claude Code skills directory not found at $CLAUDE_SRC"
-    exit 1
-fi
+mkdir -p "$CLAUDE_DST"
 
-cd "$REPO_DIR"
-git add -A
+synced=0
+for skill_dir in "$SKILLS_SRC"/*/; do
+  name="$(basename "$skill_dir")"
+  if [ -f "$skill_dir/SKILL.md" ]; then
+    rm -rf "$CLAUDE_DST/$name"
+    cp -r "$skill_dir" "$CLAUDE_DST/$name"
+    log_ok "$name"
+    synced=$((synced + 1))
+  fi
+done
 
-if git diff --staged --quiet; then
-    log_info "No changes detected. Repository is already up-to-date."
-    exit 0
-fi
-
-COMMIT_MSG="auto-sync: $(date '+%Y-%m-%d %H:%M')"
-log_info "Committing changes..."
-git commit -m "$COMMIT_MSG"
-
-log_info "Pushing updates to GitHub..."
-if git push; then
-    log_success "Successfully synchronized claude-skills to GitHub!"
-else
-    log_error "Failed to push updates to GitHub."
-    exit 1
-fi
+printf "\n${GREEN}Synced $synced skills to $CLAUDE_DST${NC}\n"

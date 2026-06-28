@@ -1,32 +1,39 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
 BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
 NC='\033[0m'
 BOLD='\033[1m'
 
-log_info()    { printf "${BLUE}[INFO]${NC} %s\n" "$1"; }
-log_success() { printf "${GREEN}[SUCCESS]${NC} %s\n" "$1"; }
-log_error()   { printf "${RED}[ERROR]${NC} %s\n" "$1" >&2; }
-
-printf "${BLUE}${BOLD}===================================================\n"
-printf "        CLAUDE SKILLS ENVIRONMENT BOOTSTRAP        \n"
-printf "===================================================\n${NC}\n"
+log_success() { printf "${GREEN}[OK]${NC}   %s\n" "$1"; }
+log_error()   { printf "${RED}[ERR]${NC}  %s\n" "$1" >&2; }
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CLAUDE_DST="$HOME/.claude"
+SKILLS_SRC="$REPO_DIR/skills"
+CLAUDE_DST="$HOME/.claude/skills"
 
-log_info "Synchronizing custom skills to Claude Code..."
-if [ -f "$REPO_DIR/skills.tar.gz" ]; then
-    mkdir -p "$CLAUDE_DST"
-    rm -rf "$CLAUDE_DST/skills"
-    tar -xzf "$REPO_DIR/skills.tar.gz" -C "$CLAUDE_DST/"
-    log_success "Skills successfully unpacked to $CLAUDE_DST/skills"
-else
-    log_error "skills.tar.gz not found!"
-    exit 1
+printf "${BLUE}${BOLD}================================\n"
+printf "  Claude Skills — Install\n"
+printf "================================${NC}\n\n"
+
+if [ ! -d "$SKILLS_SRC" ]; then
+  log_error "skills/ directory not found in $REPO_DIR"
+  exit 1
 fi
 
-printf "\n${GREEN}${BOLD}Setup completed successfully!${NC}\n"
+mkdir -p "$CLAUDE_DST"
+
+installed=0
+for skill_dir in "$SKILLS_SRC"/*/; do
+  name="$(basename "$skill_dir")"
+  if [ -f "$skill_dir/SKILL.md" ]; then
+    cp -r "$skill_dir" "$CLAUDE_DST/$name"
+    log_success "$name"
+    installed=$((installed + 1))
+  fi
+done
+
+printf "\n${GREEN}${BOLD}Installed $installed skills to $CLAUDE_DST${NC}\n"
+printf "Skills are active immediately — no Claude Code restart needed.\n"
