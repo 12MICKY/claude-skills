@@ -1,0 +1,87 @@
+name: Validate Skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check SKILL.md frontmatter
+        run: |
+          set -e
+          ERRORS=0
+
+          for skill_dir in skills/*/; do
+            skill=$(basename "$skill_dir")
+            file="$skill_dir/SKILL.md"
+
+            if [ ! -f "$file" ]; then
+              echo "MISSING: $skill/SKILL.md"
+              ERRORS=$((ERRORS + 1))
+              continue
+            fi
+
+            # Check frontmatter exists
+            if ! head -1 "$file" | grep -q "^---"; then
+              echo "NO FRONTMATTER: $skill"
+              ERRORS=$((ERRORS + 1))
+              continue
+            fi
+
+            # Check required fields
+            for field in name description; do
+              if ! grep -q "^${field}:" "$file"; then
+                echo "MISSING FIELD '$field': $skill"
+                ERRORS=$((ERRORS + 1))
+              fi
+            done
+
+            # Check name matches directory
+            skill_name=$(grep "^name:" "$file" | head -1 | sed 's/name: *//')
+            if [ "$skill_name" != "$skill" ]; then
+              echo "NAME MISMATCH: dir=$skill, name=$skill_name"
+              ERRORS=$((ERRORS + 1))
+            fi
+
+            echo "OK: $skill"
+          done
+
+          echo ""
+          echo "Skills validated: $(ls -d skills/*/ | wc -l)"
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "Errors: $ERRORS"
+            exit 1
+          fi
+
+      - name: Check for credentials
+        run: |
+          set -e
+          # Fail if real-looking credentials sneak in
+          PATTERNS=(
+            'password.*=.*[A-Za-z0-9!@#$%^&*]{8,}'
+            'SSHPASS=.\w{4,}'
+            'secret_key.*=.*[A-Za-z0-9]{16,}'
+          )
+          FOUND=0
+          for pattern in "${PATTERNS[@]}"; do
+            if grep -rE "$pattern" skills/ --include="SKILL.md" | grep -v '<\|placeholder\|\${\|example\|your-'; then
+              FOUND=1
+            fi
+          done
+          if [ "$FOUND" -eq 1 ]; then
+            echo "Possible credentials found in skill files"
+            exit 1
+          fi
+          echo "No credentials detected"
+
+      - name: Count skills
+        run: |
+          COUNT=$(ls -d skills/*/ | wc -l)
+          echo "Total skills: $COUNT"
