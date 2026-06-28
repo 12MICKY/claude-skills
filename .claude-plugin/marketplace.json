@@ -4,7 +4,7 @@
     "name": "Thiraphat Srichit",
     "url": "https://github.com/12MICKY"
   },
-  "description": "13 Claude Code skills distilled from real infrastructure work — not tutorials. Covers the full self-hosted stack: MikroTik RouterOS (firewall, QoS, WireGuard, CAPsMAN), Proxmox (Ceph, HA, PBS), K3s, Cloudflare Tunnel, Docker Swarm, Grafana/Prometheus, FastAPI, Next.js standalone, enterprise network engineering, and Linux server administration. Every skill includes production patterns, known pitfalls, and anti-patterns. No credentials or environment-specific config.",
+  "description": "15 Claude Code skills distilled from real infrastructure and maker work. Covers self-hosted stack: MikroTik RouterOS (firewall, QoS, WireGuard), Proxmox, K3s, Cloudflare Tunnel, Docker Swarm, Grafana/Prometheus, FastAPI, Next.js, network engineering, Linux admin. Plus digital fabrication: CAD design (Fusion 360, Onshape), 3D printing (FDM, slicing), and laser cutting/engraving (LightBurn). Production patterns, known pitfalls, anti-patterns. No credentials or environment-specific config.",
   "homepage": "https://github.com/12MICKY/claude-skills",
   "repository": "https://github.com/12MICKY/claude-skills",
   "metadata": {
@@ -14,7 +14,9 @@
       "mikrotik", "routeros", "proxmox", "k3s", "kubernetes",
       "wireguard", "vpn", "cloudflare", "tunnel", "docker", "swarm",
       "network", "grafana", "prometheus", "monitoring", "fastapi",
-      "nextjs", "linux", "homelab", "infrastructure", "devops"
+      "nextjs", "linux", "homelab", "infrastructure", "devops",
+      "fusion360", "onshape", "cad", "3dprinting", "lightburn",
+      "laser", "snapmaker", "fabrication", "maker"
     ]
   },
   "plugins": [
@@ -108,6 +110,20 @@
       "description": "Pragmatic homelab dev workflow — K3s-first deployment policy, Git patterns, stack selection, monitoring, backup strategy for resource-constrained environments",
       "version": "2.0.0",
       "category": "workflow"
+    },
+    {
+      "name": "cad-design",
+      "source": "./skills/cad-design",
+      "description": "CAD design with Fusion 360 and Onshape — parametric sketching, constraints, 3D bodies, assemblies, CAM toolpaths, and export to STL/STEP/DXF for 3D printing, laser cutting, and CNC",
+      "version": "2.0.0",
+      "category": "fabrication"
+    },
+    {
+      "name": "digital-fabrication",
+      "source": "./skills/digital-fabrication",
+      "description": "3D printing (FDM, Orca Slicer, Snapmaker) and laser cutting/engraving (LightBurn) — material profiles, slicer settings, print troubleshooting, power/speed tables, kerf calibration, safety",
+      "version": "2.0.0",
+      "category": "fabrication"
     }
   ]
 }
