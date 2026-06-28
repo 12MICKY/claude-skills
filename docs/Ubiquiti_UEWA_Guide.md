@@ -26,10 +26,10 @@ Layer-3 adoption allows UniFi controllers to manage devices across different sub
 UniFi APs request Option 43 in their DHCP discovery packets. The DHCP server responds with the hex-encoded IP of the UniFi Controller.
 - **Hex encoding format**: `0x01` (Sub-option ID) + `0x04` (Length of IP) + Hex representation of IP address bytes.
 - **Example Calculation**: Controller IP = `192.0.2.10`
-  - `10` = `0A`
-  - `33` = `21`
-  - `1`  = `01`
-  - `34` = `22`
+  - `192` = `C0`
+  - `0`   = `00`
+  - `2`   = `02`
+  - `10`  = `0A`
   - Result Payload = `0x0104c000020a`
 - **MikroTik RouterOS Config**:
   ```routeros
