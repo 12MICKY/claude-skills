@@ -4,7 +4,7 @@
     "name": "Thiraphat Srichit",
     "url": "https://github.com/12MICKY"
   },
-  "description": "13 production-grade Claude Code skills for infrastructure engineers — MikroTik RouterOS, Proxmox, K3s, WireGuard, Cloudflare Tunnel, Docker Swarm, Network Engineering, Grafana/Prometheus, Linux Server Admin, FastAPI, Next.js, Context Engineering, Thai Dev Workflow. Patterns validated in real homelab and production deployments. No credentials or environment-specific config.",
+  "description": "13 Claude Code skills distilled from real infrastructure work — not tutorials. Covers the full self-hosted stack: MikroTik RouterOS (firewall, QoS, WireGuard, CAPsMAN), Proxmox (Ceph, HA, PBS), K3s, Cloudflare Tunnel, Docker Swarm, Grafana/Prometheus, FastAPI, Next.js standalone, enterprise network engineering, and Linux server administration. Every skill includes production patterns, known pitfalls, and anti-patterns. No credentials or environment-specific config.",
   "homepage": "https://github.com/12MICKY/claude-skills",
   "repository": "https://github.com/12MICKY/claude-skills",
   "metadata": {
