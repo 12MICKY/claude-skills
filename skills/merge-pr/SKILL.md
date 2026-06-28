@@ -1,6 +1,6 @@
 ---
-name: "merge-pr"
-description: "Merge a GitHub PR after all checks pass. Trigger for: /merge-pr, merge PR, approve and merge, squash merge, ship PR. Verifies CI, draft state, and approvals, then merges with the correct strategy based on branch type."
+name: merge-pr
+description: Merge a GitHub PR after all checks pass. Trigger for: /merge-pr, merge PR, approve and merge, squash merge, ship PR. Verifies CI, draft state, and approvals, then merges with the correct strategy based on branch type.
 ---
 
 # Merge PR

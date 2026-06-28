@@ -1,6 +1,6 @@
 ---
-name: "open-pr"
-description: "Create a GitHub Pull Request for the current branch. Trigger for: /open-pr, create PR, open pull request, push and PR, submit PR. Gathers diff summary, writes title+body, pushes branch, opens PR via gh CLI."
+name: open-pr
+description: Create a GitHub Pull Request for the current branch. Trigger for: /open-pr, create PR, open pull request, push and PR, submit PR. Gathers diff summary, writes title+body, pushes branch, opens PR via gh CLI.
 ---
 
 # Open PR

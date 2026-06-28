@@ -1,6 +1,6 @@
 ---
-name: "create-branch"
-description: "Create and switch to a new git branch with proper naming convention. Trigger for: /create-branch, new branch, create branch, checkout new branch, branch off. Infers branch type from context, names it correctly, and pushes if requested."
+name: create-branch
+description: Create and switch to a new git branch with proper naming convention. Trigger for: /create-branch, new branch, create branch, checkout new branch, branch off. Infers branch type from context, names it correctly, and pushes if requested.
 ---
 
 # Create Branch

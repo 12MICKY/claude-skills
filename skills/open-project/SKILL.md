@@ -1,6 +1,6 @@
 ---
-name: "open-project"
-description: "Initialize a new code project with proper structure, git, and GitHub repo. Trigger for: /open-project, init project, new project, bootstrap project, create project, start project. Creates directory structure, git init, optional GitHub repo."
+name: open-project
+description: Initialize a new code project with proper structure, git, and GitHub repo. Trigger for: /open-project, init project, new project, bootstrap project, create project, start project. Creates directory structure, git init, optional GitHub repo.
 ---
 
 # Open Project

@@ -1,6 +1,6 @@
 ---
-name: "create-release"
-description: "Create a GitHub Release with changelog and version tag. Trigger for: /create-release, release, cut a release, tag release, publish release, ship version. Bumps version, generates changelog from commits, tags, and publishes via gh CLI."
+name: create-release
+description: Create a GitHub Release with changelog and version tag. Trigger for: /create-release, release, cut a release, tag release, publish release, ship version. Bumps version, generates changelog from commits, tags, and publishes via gh CLI.
 ---
 
 # Create Release
