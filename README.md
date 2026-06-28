@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0UJWFdcQLHBB7xw_hLJGnKDGV7Za50Ic4Qzp-iFnSbO6SPT0YRfEklFay&s=10" width="80" alt="Claude" />
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0UJWFdcQLHBB7xw_hLJGnKDGV7Za50Ic4Qzp-iFnSbO6SPT0YRfEklFay&s=10" width="160" alt="Claude" />
 
 # claude-skills
 
