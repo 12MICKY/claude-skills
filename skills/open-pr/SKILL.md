@@ -5,67 +5,105 @@ description: "Create a GitHub Pull Request for the current branch. Trigger for: 
 
 # Open PR
 
-Create a GitHub Pull Request from the current branch with a well-structured title and body.
+Push the current branch and open a well-structured GitHub Pull Request. After this, use `/pr-review` or `/merge-pr`.
+
+## Invocation Forms
+- `/open-pr` — PR from current branch to default base
+- `/open-pr --draft` — open as draft PR
+- `/open-pr --base <branch>` — override base branch
+- `/open-pr --reviewer <handle>` — request a reviewer
 
 ## Workflow
 
-### 1. Gather context (run in parallel)
-- `git status` — check for uncommitted changes (warn if dirty)
-- `git branch --show-current` — current branch name
-- `git symbolic-ref refs/remotes/origin/HEAD | sed 's|.*/||'` — detect default base branch (main/master)
-- `git log <base>...HEAD --oneline` — commits on this branch
-- `git diff <base>...HEAD --stat` — files changed
-- `git remote get-url origin` — repo URL
-
-### 2. Read the diff
-- `git diff main...HEAD` — full diff to understand what changed
-- If diff is large (>300 lines), read `--stat` only and focus on commit messages
-
-### 3. Determine base branch
-- Use the base branch detected in Step 1
-- If user specifies a base branch, use that instead
-
-### 4. Push branch if needed
+### 0. Prerequisites
 ```bash
-git push -u origin <branch>
+gh auth status    # must be authenticated
+git status        # check for uncommitted changes
 ```
-Check if remote branch exists first with `git ls-remote --heads origin <branch>`.
+If there are uncommitted changes: warn and ask whether to commit them first or proceed with existing commits only.
+
+### 1. Detect base branch
+```bash
+BASE=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|.*/||')
+# If that fails, fallback:
+BASE=${BASE:-$(git branch -r | grep -E 'origin/(main|master)' | head -1 | sed 's|.*/||')}
+BASE=${BASE:-main}
+echo "Base branch: $BASE"
+```
+
+### 2. Gather context (run in parallel)
+```bash
+git branch --show-current                    # current branch name
+git log $BASE...HEAD --oneline               # commits on this branch
+git diff $BASE...HEAD --stat                 # files changed summary
+git remote get-url origin                    # repo URL (to resolve owner/repo)
+```
+
+If `git log` returns nothing → STOP: "No commits ahead of $BASE — nothing to PR."
+
+### 3. Check for existing PR
+```bash
+gh pr list --head $(git branch --show-current) --json url --jq '.[0].url'
+```
+If a PR already exists → show its URL, do not create a duplicate.
+
+### 4. Read the diff
+```bash
+git diff $BASE...HEAD
+```
+If diff >300 lines: read `--stat` + commit messages only to infer intent.
 
 ### 5. Draft PR title and body
+
 **Title rules:**
 - Max 70 characters
-- Format: `<type>: <what changed>` — type = feat / fix / refactor / chore / docs
-- Translate any non-English branch names to an English title
+- Format: `<type>: <concise description>`
+- Types: `feat` / `fix` / `refactor` / `chore` / `docs` / `hotfix`
+- Infer type from branch name prefix
 
 **Body template:**
 ```markdown
 ## Summary
-- <bullet 1>
-- <bullet 2>
+- <what this PR does — 1-3 bullets>
 
 ## Changes
-- <key file or component>: <what changed>
+- `<file or module>`: <what changed and why>
 
 ## Test plan
-- [ ] <test step 1>
-- [ ] <test step 2>
+- [ ] <manual test step>
+- [ ] <edge case to verify>
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 ```
 
-### 6. Create PR
+### 6. Push branch
 ```bash
-gh pr create --title "<title>" --body "$(cat <<'EOF'
-<body>
-EOF
-)"
+# Check if remote branch exists
+git ls-remote --heads origin $(git branch --show-current) | grep -q . \
+  && echo "already pushed" \
+  || git push -u origin $(git branch --show-current)
 ```
 
-### 7. Output
-Return the PR URL only. No recap.
+### 7. Create PR
+```bash
+gh pr create \
+  --title "<title>" \
+  --body "$(cat <<'EOF'
+<body>
+EOF
+)" \
+  --base "$BASE" \
+  ${DRAFT:+--draft} \
+  ${REVIEWER:+--reviewer "$REVIEWER"}
+```
+
+### 8. Output
+PR URL only. No recap.
 
 ## Edge Cases
-- **Uncommitted changes**: warn and ask if user wants to commit first, or proceed with existing commits
-- **No commits ahead of main**: tell the user — nothing to PR
+- **Uncommitted changes**: warn — ask commit first or skip
+- **No commits ahead of base**: STOP — nothing to PR
 - **gh not authenticated**: suggest `gh auth login`
-- **Branch already has open PR**: show existing PR URL instead of creating duplicate
+- **Existing open PR**: show URL, do not duplicate
+- **Draft flag**: pass `--draft` to `gh pr create`
+- **Force-pushed branch**: `git push -u origin <branch> --force-with-lease` (safer than --force)

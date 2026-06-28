@@ -5,106 +5,149 @@ description: "Review a GitHub PR or local diff and write structured review comme
 
 # PR Review
 
-Write a structured code review for a GitHub PR or the current branch diff.
+Write a structured code review for a GitHub PR or the current branch diff. After this, use `/merge-pr` to ship.
 
 ## Invocation Forms
-- `/pr-review` — review current branch diff vs main
+- `/pr-review` — review current branch diff vs base
 - `/pr-review <PR#>` — review a specific GitHub PR
-- `/pr-review <PR URL>` — review by URL
+- `/pr-review <PR URL>` — review by full URL
+
+## Severity Levels
+
+| Icon | Label | Meaning | Blocks merge? |
+|------|-------|---------|---------------|
+| 🔴 | **BLOCKER** | Bug, security hole, data loss risk | Yes |
+| 🟡 | **SUGGESTION** | Cleaner/safer approach | No |
+| 🟢 | **NIT** | Style, naming, minor polish | No |
 
 ## Workflow
 
 ### 1. Get the diff
-**If PR number/URL given:**
+
+**GitHub PR:**
 ```bash
-gh pr view <PR#> --json title,body,headRefName,baseRefName
+gh pr view <PR#> --json title,body,headRefName,baseRefName,author,isDraft
 gh pr diff <PR#>
-gh pr view <PR#> --json files
+gh pr view <PR#> --json files --jq '[.files[].path]'
 ```
+If PR is a draft: note it in the summary but still review.
 
-**If no PR number (current branch):**
+**Local diff (no PR#):**
 ```bash
-git diff main...HEAD
-git log main...HEAD --oneline
+BASE=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|.*/||' || echo main)
+git diff $BASE...HEAD
+git log $BASE...HEAD --oneline
 ```
 
-### 2. Read changed files fully
-For each changed file, read the full file (not just the diff hunk) to understand context — especially for:
-- Security-sensitive code (auth, SQL, file paths, env vars)
-- Public API surfaces
-- Business logic
+### 2. Read changed files in full
+For each changed file, read the complete file — not just the diff hunk.
+Context outside the hunk often reveals the real impact of a change.
 
-### 3. Categorize findings
-Use these severity levels:
+Prioritize full reads for:
+- Auth, session, permission logic
+- Database queries and migrations
+- Public API handlers
+- Config and environment loading
 
-| Level | Label | Meaning |
-|-------|-------|---------|
-| 🔴 | **BLOCKER** | Bug, security hole, data loss risk — must fix before merge |
-| 🟡 | **SUGGESTION** | Cleaner/safer approach, but not blocking |
-| 🟢 | **NIT** | Style, naming, minor — optional |
+### 3. Write findings
 
-### 4. Write the review
-
-**Summary block (always first):**
-```
+**Review structure:**
+```markdown
 ## Review Summary
 <1-2 sentence overall assessment>
 
 **Verdict:** ✅ Approve / ⚠️ Request changes / 🔴 Block
-```
 
-**Per-finding format:**
-```
+---
+
 ### <file>:<line>
 🔴 BLOCKER / 🟡 SUGGESTION / 🟢 NIT
 
-**Issue:** <what's wrong>
+**Issue:** <what is wrong>
 **Why:** <why it matters>
 **Fix:**
-```<lang>
-<corrected code>
-```
+```lang
+<corrected snippet>
 ```
 
-### 5. Post or print
-**If reviewing a GitHub PR:**
-```bash
-gh pr review <PR#> --comment --body "<review body>"
+---
 ```
-For inline comments on specific lines:
+
+### 4. Post or print
+
+**GitHub PR — post comment:**
+```bash
+gh pr review <PR#> --comment --body "$(cat <<'EOF'
+<full review>
+EOF
+)"
+```
+
+**Inline comment on a specific line:**
 ```bash
 gh api repos/{owner}/{repo}/pulls/<PR#>/comments \
-  -f body="<comment>" -f path="<file>" -f line=<N> -f side=RIGHT
+  -f body="<comment>" \
+  -f path="<file>" \
+  -f line=<N> \
+  -f side=RIGHT \
+  -f commit_id=$(gh pr view <PR#> --json headRefOid --jq '.headRefOid')
 ```
 
-**If reviewing local diff:** print the review to terminal only.
+**Local diff — print only** (no GitHub post).
 
-### 6. Output
-- If posted: show PR URL + comment URL
-- If printed: show full review, then one-line verdict
-- No trailing recap
+### 5. Output
+- GitHub PR: PR URL + review URL
+- Local: full review printed, then one-line verdict
 
-## What to look for
+---
 
-**Security (always check):**
-- Unsanitized user input used in SQL, shell commands, file paths
-- Hardcoded secrets, tokens, passwords
-- Missing auth checks on new endpoints
-- CORS, CSRF, XSS vectors in web code
+## What to Check
 
-**Correctness:**
-- Off-by-one errors, null/undefined not handled
-- Race conditions (async code, shared state)
-- Wrong HTTP status codes
-- Missing error handling at system boundaries (user input, external APIs)
+### Security (always — every PR)
+- User input used in SQL queries without parameterization
+- User input used in shell commands (`exec`, `subprocess`, `os.system`)
+- Hardcoded secrets, API keys, passwords in any file including tests
+- Missing authentication/authorization checks on new routes or handlers
+- File path traversal (`../` in user-controlled paths)
+- XSS: unsanitized output in HTML templates
+- CORS/CSRF misconfiguration on new endpoints
+- Insecure deserialization (pickle, eval, JSON with prototype pollution)
 
-**Maintainability (suggest, not block):**
-- Function >50 lines that could be split
-- Magic numbers without explanation
-- Duplicate logic that could be shared
-- Missing or misleading variable names
+### Correctness
+- Off-by-one in loops, slice indices, pagination
+- Null / nil / undefined not handled before use
+- Async bugs: missing `await`, race condition on shared state
+- Wrong HTTP status codes (e.g. 200 on error, 404 vs 400)
+- Error swallowed silently (`catch {}`, `_ = err`)
+- Wrong comparison operator (`=` vs `==`, `==` vs `===`)
 
-**Skip:**
-- Style issues already handled by linter
-- Hypothetical future requirements
-- Commenting on code outside the diff
+### Language-specific
+
+**JavaScript / TypeScript:**
+- `== null` vs `=== null` (use `== null` to catch both null and undefined)
+- `any` type that bypasses TypeScript safety
+- Unhandled promise rejections
+- `console.log` left in production code
+
+**Python:**
+- Mutable default argument `def f(x=[]):`
+- Bare `except:` that swallows all errors
+- `assert` used for input validation (stripped by `-O` flag)
+- `eval()` / `exec()` on any external input
+
+**Go:**
+- `err` returned but not checked
+- `defer` inside a loop (runs at function exit, not loop iteration)
+- Nil pointer dereference on pointer receivers
+- Goroutine leak (goroutine started but never stops)
+
+### Maintainability (suggest, not block)
+- Function longer than ~50 lines with multiple responsibilities
+- Magic numbers/strings without a named constant
+- Copy-pasted logic that could be a shared function
+- Variable name that requires reading the whole function to understand
+
+### Skip
+- Style issues covered by the project linter
+- Hypothetical future requirements not in scope
+- Code outside the diff

@@ -5,117 +5,250 @@ description: "Initialize a new code project with proper structure, git, and GitH
 
 # Open Project
 
-Bootstrap a new project with the right structure for the chosen stack (Python / Node.js / Go / Next.js / Docker).
+Bootstrap a new project with production-ready structure. After this, use `/create-branch` to start work.
 
 ## Invocation Forms
-- `/open-project` — interactive: ask name + stack
-- `/open-project <name>` — infer stack from context or ask
+- `/open-project` — ask name then stack
+- `/open-project <name>` — ask stack only
 - `/open-project <name> <stack>` — go directly
 
 ## Supported Stacks
 
-| Stack | Structure created |
-|-------|------------------|
+| Stack | Creates |
+|-------|---------|
 | `python` | `src/`, `tests/`, `requirements.txt`, `.env.example`, `Dockerfile` |
-| `node` | `src/`, `package.json`, `.env.example`, `Dockerfile` |
-| `go` | `cmd/`, `internal/`, `go.mod`, `Dockerfile` |
-| `nextjs` | `npx create-next-app` with app router |
-| `docker` | `docker-compose.yml` + service skeleton |
-| `bare` | Just `git init` + `.gitignore` |
+| `node` | `src/index.js`, `package.json`, `.env.example`, `Dockerfile` |
+| `go` | `cmd/main.go`, `internal/`, `go.mod`, `Dockerfile` |
+| `nextjs` | full Next.js app via `create-next-app` |
+| `docker` | `docker-compose.yml` skeleton |
+| `bare` | `git init` + `.gitignore` only |
 
 ## Workflow
 
-### 1. Clarify (one question max)
-If stack is unknown, ask: "Stack? (python / node / go / nextjs / docker / bare)"
-If name is unknown, ask for name. Never ask both at once — name first.
-
-### 2. Create directory & files
-
-**All stacks — base files:**
+### 0. Prerequisites
 ```bash
-mkdir <name> && cd <name>
+gh auth status          # must be logged in if creating GitHub repo
+git config user.name    # must be set
+git config user.email   # must be set
+```
+
+### 1. Clarify (one question max)
+- If name unknown: ask name first
+- If stack unknown: ask "Stack? (python / node / go / nextjs / docker / bare)"
+- Never ask both at once
+
+### 2. Create base structure
+```bash
+mkdir <name>
+cd <name>
 git init
 ```
 
-`.gitignore` — use GitHub's standard template for the stack + always add:
+**Universal `.gitignore`:**
 ```
 .env
-*.env.local
-__pycache__/
-node_modules/
-dist/
+.env.local
+.env.*.local
+*.log
 .DS_Store
+Thumbs.db
 ```
+
+Stack-specific additions to `.gitignore`:
+
+| Stack | Add |
+|-------|-----|
+| python | `__pycache__/` `*.pyc` `.venv/` `dist/` `*.egg-info/` |
+| node | `node_modules/` `dist/` `.next/` `coverage/` |
+| go | `bin/` `dist/` `vendor/` |
+
+### 3. Stack-specific files
 
 **Python:**
 ```
-<name>/
-├── src/<name>/
-│   └── __init__.py
-├── tests/
-│   └── __init__.py
-├── requirements.txt
-├── .env.example
-├── Dockerfile
-└── .gitignore
+src/<name>/__init__.py   (empty)
+tests/__init__.py        (empty)
+tests/test_main.py       (empty)
+requirements.txt
+.env.example
+Dockerfile
 ```
+
+`requirements.txt`:
+```
+# Add dependencies here
+# Example: fastapi==0.115.0
+```
+
+`Dockerfile`:
+```dockerfile
+FROM python:3.13-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY src/ ./src/
+RUN useradd -m appuser && chown -R appuser /app
+USER appuser
+CMD ["python", "-m", "src.<name>"]
+```
+
+---
 
 **Node.js:**
-```bash
-npm init -y
-mkdir src
 ```
-Files: `src/index.js`, `.env.example`, `Dockerfile` (node:24-alpine base)
+src/index.js
+package.json  (via npm init -y)
+.env.example
+Dockerfile
+```
+
+`src/index.js`:
+```js
+'use strict'
+
+async function main() {
+  console.log('<name> started')
+}
+
+main().catch(err => { console.error(err); process.exit(1) })
+```
+
+`Dockerfile`:
+```dockerfile
+FROM node:24-alpine
+WORKDIR /app
+COPY package*.json .
+RUN npm ci --omit=dev
+COPY src/ ./src/
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+CMD ["node", "src/index.js"]
+```
+
+---
 
 **Go:**
-```bash
-go mod init github.com/12MICKY/<name>
-mkdir -p cmd internal
 ```
-Files: `cmd/main.go`, `Dockerfile` (golang:1.24-alpine builder + scratch final)
+cmd/<name>/main.go
+internal/          (empty dir — add .gitkeep)
+go.mod             (via go mod init)
+Dockerfile
+```
+
+`cmd/<name>/main.go`:
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	fmt.Println("<name> started")
+	os.Exit(0)
+}
+```
+
+`Dockerfile`:
+```dockerfile
+FROM golang:1.24-alpine AS builder
+WORKDIR /app
+COPY go.mod go.sum* ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/app ./cmd/<name>
+
+FROM scratch
+COPY --from=builder /bin/app /app
+USER 65534
+ENTRYPOINT ["/app"]
+```
+
+`go.mod`:
+```
+module github.com/12MICKY/<name>
+
+go 1.24
+```
+
+---
 
 **Next.js:**
 ```bash
-npx create-next-app@latest <name> --typescript --tailwind --app --no-src-dir
+npx create-next-app@latest <name> \
+  --typescript --tailwind --app --no-src-dir --eslint
+cd <name>
 ```
+No manual files needed — `create-next-app` handles everything.
+
+---
 
 **Docker:**
 ```yaml
+# docker-compose.yml
 services:
-  app:
+  <name>:
     image: <name>:latest
     restart: unless-stopped
     ports:
       - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - data:/app/data
+
 volumes:
   data:
+
 networks:
   default:
+    name: <name>-network
 ```
 
-### 3. Initial commit
+---
+
+**Bare:**
+```bash
+git init
+# .gitignore with universal entries only
+```
+
+### 4. `.env.example`
+```
+# Copy to .env and fill in values
+APP_PORT=3000
+APP_ENV=development
+# DATABASE_URL=postgres://user:pass@localhost:5432/dbname
+# SECRET_KEY=changeme
+```
+
+### 5. Initial commit
 ```bash
 git add .
 git commit -m "chore: init <name> project"
 ```
 
-### 4. GitHub repo (ask unless already specified)
+### 6. GitHub repo
 Ask: "Create a GitHub repo? (yes/no)"
 
 If yes:
 ```bash
 gh repo create 12MICKY/<name> --private --source=. --push
 ```
-Default: **private**. Ask if public is needed.
+Default: **private**. Ask only if public is needed.
 
-### 5. Output
-- List of files created
-- GitHub repo URL (if created)
-- One-line next step hint: e.g. `cd <name> && npm install`
+### 7. Output
+```
+Project: <name>  Stack: <stack>
+Files:   <list of files created>
+Repo:    https://github.com/12MICKY/<name>  (if created)
+Next:    /create-branch feat/<first-feature>
+```
 
-## Rules
+## Hard Rules
 - Never create `README.md` unless user asks
-- Never add Docker config for K3s/Swarm by default — that is a deploy step, not init
+- Never add K3s/Swarm config — that is a deploy step
 - Dockerfile always uses non-root user
-- `.env.example` has placeholder values, never real secrets
-- Go module path always uses `github.com/12MICKY/<name>`
+- `.env.example` never contains real secrets
+- Go module path always `github.com/12MICKY/<name>`
