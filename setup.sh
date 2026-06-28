@@ -7,8 +7,8 @@ RED='\033[0;31m'
 NC='\033[0m'
 BOLD='\033[1m'
 
-log_success() { printf "${GREEN}[OK]${NC}   %s\n" "$1"; }
-log_error()   { printf "${RED}[ERR]${NC}  %s\n" "$1" >&2; }
+log_ok()    { printf "${GREEN}[OK]${NC}   %s\n" "$1"; }
+log_error() { printf "${RED}[ERR]${NC}  %s\n" "$1" >&2; }
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILLS_SRC="$REPO_DIR/skills"
@@ -25,15 +25,18 @@ fi
 
 mkdir -p "$CLAUDE_DST"
 
+shopt -s nullglob
 installed=0
 for skill_dir in "$SKILLS_SRC"/*/; do
   name="$(basename "$skill_dir")"
   if [ -f "$skill_dir/SKILL.md" ]; then
+    rm -rf "${CLAUDE_DST:?}/$name"
     cp -r "$skill_dir" "$CLAUDE_DST/$name"
-    log_success "$name"
+    log_ok "$name"
     installed=$((installed + 1))
   fi
 done
+shopt -u nullglob
 
-printf "\n${GREEN}${BOLD}Installed $installed skills to $CLAUDE_DST${NC}\n"
+printf "\n${GREEN}${BOLD}Installed %d skills to %s${NC}\n" "$installed" "$CLAUDE_DST"
 printf "Skills are active immediately — no Claude Code restart needed.\n"

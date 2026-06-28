@@ -175,7 +175,8 @@ systemctl enable --now node_exporter
 ```bash
 # Any script that writes to .prom file gets scraped automatically
 mkdir -p /var/lib/node_exporter/textfile
-chmod 777 /var/lib/node_exporter/textfile
+chown node_exporter:node_exporter /var/lib/node_exporter/textfile
+chmod 755 /var/lib/node_exporter/textfile
 
 # Example: WireGuard peer health exporter
 cat > /usr/local/bin/wg-exporter.sh << 'EOF'
@@ -190,7 +191,7 @@ OUTPUT=/var/lib/node_exporter/textfile/wg_peers.prom
     now=$(date +%s)
     age=$(( now - ts ))
     up=$(( age <= THRESHOLD ? 1 : 0 ))
-    short="${pubkey:0:8}"
+    short="${pubkey:0:16}"
     echo "wireguard_peer_up{interface=\"$iface\",peer=\"$short\"} $up"
   done
 } > "$OUTPUT"

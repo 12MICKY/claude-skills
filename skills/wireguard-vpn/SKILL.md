@@ -172,7 +172,7 @@ wg show all latest-handshakes | while read iface pubkey ts; do
   now=$(date +%s)
   age=$(( now - ts ))
   up=$(( age <= THRESHOLD ? 1 : 0 ))
-  echo "wireguard_peer_up{interface=\"$iface\",peer=\"${pubkey:0:8}\"} $up"
+  echo "wireguard_peer_up{interface=\"$iface\",peer=\"${pubkey:0:16}\"} $up"
 done > /var/lib/node_exporter/textfile/wg_peers.prom
 ```
 

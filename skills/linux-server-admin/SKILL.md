@@ -183,7 +183,15 @@ fail2ban-client status sshd
 # Unban an IP
 fail2ban-client set sshd unbanip 1.2.3.4
 
-# Custom jail config
+# 1. Create filter (defines what a failed attempt looks like)
+cat > /etc/fail2ban/filter.d/myapp.conf << 'EOF'
+[Definition]
+failregex = ^<HOST> .* "(GET|POST) .*" 401
+            ^.*Failed login from <HOST>
+ignoreregex =
+EOF
+
+# 2. Create jail (references the filter above)
 cat > /etc/fail2ban/jail.d/myapp.conf << 'EOF'
 [myapp]
 enabled  = true
@@ -196,6 +204,7 @@ findtime = 600
 EOF
 
 systemctl restart fail2ban
+fail2ban-client status myapp   # verify jail is active
 ```
 
 ## Log Analysis

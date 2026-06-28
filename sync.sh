@@ -9,7 +9,6 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 log_ok()    { printf "${GREEN}[OK]${NC}   %s\n" "$1"; }
-log_info()  { printf "${BLUE}[--]${NC}   %s\n" "$1"; }
 log_error() { printf "${RED}[ERR]${NC}  %s\n" "$1" >&2; }
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -23,15 +22,17 @@ fi
 
 mkdir -p "$CLAUDE_DST"
 
+shopt -s nullglob
 synced=0
 for skill_dir in "$SKILLS_SRC"/*/; do
   name="$(basename "$skill_dir")"
   if [ -f "$skill_dir/SKILL.md" ]; then
-    rm -rf "$CLAUDE_DST/$name"
+    rm -rf "${CLAUDE_DST:?}/$name"
     cp -r "$skill_dir" "$CLAUDE_DST/$name"
     log_ok "$name"
     synced=$((synced + 1))
   fi
 done
+shopt -u nullglob
 
-printf "\n${GREEN}Synced $synced skills to $CLAUDE_DST${NC}\n"
+printf "\n${GREEN}Synced %d skills to %s${NC}\n" "$synced" "$CLAUDE_DST"

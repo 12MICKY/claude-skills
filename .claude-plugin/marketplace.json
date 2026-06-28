@@ -8,7 +8,7 @@
   "homepage": "https://github.com/12MICKY/claude-skills",
   "repository": "https://github.com/12MICKY/claude-skills",
   "metadata": {
-    "version": "1.1.0",
+    "version": "2.0.0",
     "category": "infrastructure",
     "keywords": [
       "mikrotik", "routeros", "proxmox", "k3s", "kubernetes",
@@ -22,91 +22,91 @@
       "name": "mikrotik-routeros",
       "source": "./skills/mikrotik-routeros",
       "description": "MikroTik RouterOS — firewall chains (RAW/filter/mangle/NAT), Queue Tree/PCQ bandwidth management, VLAN bridge-filtering, WireGuard VPN, CAPsMAN wireless, OSPF/BGP routing, scripting",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "networking"
     },
     {
       "name": "proxmox-homelab",
       "source": "./skills/proxmox-homelab",
       "description": "Proxmox VE — VM/LXC management, Ceph RBD/CephFS, HA manager, SDN/VXLAN, PBS backup, pvesh automation",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "infrastructure"
     },
     {
       "name": "k3s-kubernetes",
       "source": "./skills/k3s-kubernetes",
       "description": "K3s — Deployments, Traefik IngressRoute, ConfigMaps/Secrets, PVCs, private registry, rolling updates, debugging",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "infrastructure"
     },
     {
       "name": "cloudflare-tunnel",
       "source": "./skills/cloudflare-tunnel",
       "description": "Cloudflare Tunnel — zero-trust public exposure, K3s HA deployment, DNS automation, config management, no open ports",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "networking"
     },
     {
       "name": "wireguard-vpn",
       "source": "./skills/wireguard-vpn",
       "description": "WireGuard VPN — server/client config, hub-and-spoke, road-warrior, multi-WAN asymmetric routing fix, MTU tuning",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "networking"
     },
     {
       "name": "docker-swarm",
       "source": "./skills/docker-swarm",
       "description": "Docker Swarm — stack deploy, immutable config/secret versioning, placement constraints, rolling updates, overlay networks",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "infrastructure"
     },
     {
       "name": "network-engineer",
       "source": "./skills/network-engineer",
       "description": "Network engineering — OSI troubleshooting methodology, BGP/OSPF, Cisco IOS patterns, interface counters, VLAN design, Netmiko automation",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "networking"
     },
     {
       "name": "grafana-prometheus",
       "source": "./skills/grafana-prometheus",
       "description": "Grafana + Prometheus monitoring — dashboard design, PromQL, alerting rules, exporters (node/blackbox/snmp), WireGuard peer metrics",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "observability"
     },
     {
       "name": "linux-server-admin",
       "source": "./skills/linux-server-admin",
       "description": "Linux server administration — systemd units/timers, disk management, network config (netplan/nmcli), firewall (ufw/iptables), fail2ban, log analysis",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "infrastructure"
     },
     {
       "name": "python-fastapi",
       "source": "./skills/python-fastapi",
       "description": "FastAPI backend patterns — async routes, Pydantic models, Postgres with asyncpg, JWT auth, background tasks, Docker deployment",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "backend"
     },
     {
       "name": "nextjs-deployment",
       "source": "./skills/nextjs-deployment",
       "description": "Next.js deployment — standalone output, Docker/K3s deploy, static asset gotchas, PM2, environment variables, CI/CD with GitHub Actions",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "frontend"
     },
     {
       "name": "context-engineering",
       "source": "./skills/context-engineering",
       "description": "Context engineering — context window mechanics, compression strategies, degradation patterns, multi-agent coordination, tool design, harness engineering",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "ai"
     },
     {
       "name": "thai-dev-workflow",
       "source": "./skills/thai-dev-workflow",
       "description": "Pragmatic homelab dev workflow — K3s-first deployment policy, Git patterns, stack selection, monitoring, backup strategy for resource-constrained environments",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "category": "workflow"
     }
   ]
